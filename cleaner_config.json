@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "description": "Configuration file for Cursor & Windsurf Data Cleaner",
+  
+  "applications": {
+    "cursor": {
+      "display_name": "Cursor AI",
+      "process_names": ["cursor", "cursor.exe"],
+      "data_paths": {
+        "windows": [
+          "%APPDATA%/Cursor",
+          "%LOCALAPPDATA%/Cursor",
+          "%APPDATA%/cursor-ai",
+          "%LOCALAPPDATA%/cursor-ai"
+        ],
+        "darwin": [
+          "~/Library/Application Support/Cursor",
+          "~/Library/Application Support/cursor-ai"
+        ],
+        "linux": [
+          "~/.config/Cursor",
+          "~/.config/cursor-ai"
+        ]
+      }
+    },
+    "windsurf": {
+      "display_name": "Windsurf AI",
+      "process_names": ["windsurf", "windsurf.exe", "Windsurf"],
+      "data_paths": {
+        "windows": [
+          "%APPDATA%/Windsurf",
+          "%LOCALAPPDATA%/Windsurf",
+          "%APPDATA%/windsurf-ai",
+          "%LOCALAPPDATA%/windsurf-ai",
+          "%APPDATA%/Codeium/Windsurf",
+          "%LOCALAPPDATA%/Codeium/Windsurf"
+        ],
+        "darwin": [
+          "~/Library/Application Support/Windsurf",
+          "~/Library/Application Support/windsurf-ai",
+          "~/Library/Application Support/Codeium/Windsurf"
+        ],
+        "linux": [
+          "~/.config/Windsurf",
+          "~/.config/windsurf-ai",
+          "~/.config/Codeium/Windsurf"
+        ]
+      }
+    }
+  },
+  
+  "cleaning_options": {
+    "telemetry_keys": [
+      "machineId",
+      "telemetry.machineId",
+      "telemetryMachineId",
+      "deviceId",
+      "telemetry.deviceId",
+      "lastSessionId",
+      "sessionId",
+      "installationId",
+      "sqmUserId",
+      "sqmMachineId",
+      "clientId",
+      "instanceId"
+    ],
+    
+    "session_keys": [
+      "lastSessionDate",
+      "sessionStartTime",
+      "userSession",
+      "authToken",
+      "accessToken",
+      "refreshToken",
+      "bearerToken",
+      "apiKey",
+      "userToken"
+    ],
+    
+    "database_keywords": [
+      "augment",
+      "account",
+      "session",
+      "user",
+      "login",
+      "auth",
+      "token",
+      "credential",
+      "profile",
+      "identity"
+    ],
+    
+    "cache_directories": [
+      "IndexedDB",
+      "Local Storage",
+      "Cache",
+      "Code Cache",
+      "GPUCache",
+      "blob_storage",
+      "logs",
+      "User/workspaceStorage",
+      "User/History",
+      "User/logs",
+      "CachedData",
+      "CachedExtensions",
+      "ShaderCache",
+      "WebStorage"
+    ],
+    
+    "database_files": [
+      "state.vscdb",
+      "storage.json",
+      "preferences.json",
+      "settings.json"
+    ],
+    
+    "cache_table_patterns": [
+      "cache",
+      "session",
+      "temp",
+      "log",
+      "history",
+      "recent",
+      "workspace",
+      "project"
+    ]
+  },
+  
+  "backup_options": {
+    "enabled": true,
+    "compression": false,
+    "retention_days": 30,
+    "max_backup_size_mb": 1000
+  },
+  
+  "safety_options": {
+    "require_confirmation": true,
+    "check_running_processes": true,
+    "create_restore_script": true,
+    "verify_backups": true
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "file": "cursor_windsurf_cleaner.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  }
+}

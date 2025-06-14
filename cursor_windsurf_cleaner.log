@@ -1,0 +1,235 @@
+2025-06-14 12:01:07,955 - INFO - === Application Data Discovery ===
+2025-06-14 12:01:07,955 - INFO - Cursor: Found at C:\Users\Usman Khan\AppData\Roaming\Cursor
+2025-06-14 12:01:08,175 - INFO - Windsurf: Found at C:\Users\Usman Khan\AppData\Roaming\Windsurf
+2025-06-14 12:01:08,355 - INFO - Backup directory: C:\Users\Usman Khan\CursorWindsurf_Cleaner_Backups
+2025-06-14 12:01:08,355 - INFO - === Advanced Application Data Discovery ===
+2025-06-14 12:01:08,355 - INFO - Cursor AI: Found at C:\Users\Usman Khan\AppData\Roaming\Cursor
+2025-06-14 12:01:09,466 - INFO - Windsurf AI: Found at C:\Users\Usman Khan\AppData\Roaming\Windsurf
+2025-06-14 12:01:10,505 - INFO - Updated machineId in test_app database
+2025-06-14 12:01:10,505 - INFO - Updated sessionId in test_app database
+2025-06-14 12:01:10,505 - INFO - Cleared authToken from test_app database
+2025-06-14 12:01:10,541 - INFO - Successfully modified telemetry IDs in C:\Users\USMANK~1\AppData\Local\Temp\tmprbie7nad\test.vscdb
+2025-06-14 12:01:10,557 - INFO - Updated machineId in C:\Users\USMANK~1\AppData\Local\Temp\tmpxx55yha0\test.json
+2025-06-14 12:01:10,557 - INFO - Updated sessionId in C:\Users\USMANK~1\AppData\Local\Temp\tmpxx55yha0\test.json
+2025-06-14 12:01:10,558 - INFO - Removed authToken from C:\Users\USMANK~1\AppData\Local\Temp\tmpxx55yha0\test.json
+2025-06-14 12:01:10,558 - INFO - Successfully modified JSON telemetry in C:\Users\USMANK~1\AppData\Local\Temp\tmpxx55yha0\test.json
+2025-06-14 12:01:10,588 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\test_backup_20250614_120110
+2025-06-14 12:03:28,466 - INFO - === Advanced Application Data Discovery ===
+2025-06-14 12:03:28,466 - INFO - Cursor AI: Found at C:\Users\Usman Khan\AppData\Roaming\Cursor
+2025-06-14 12:03:29,320 - INFO - Windsurf AI: Found at C:\Users\Usman Khan\AppData\Roaming\Windsurf
+2025-06-14 12:03:37,715 - INFO - Starting advanced cleanup for cursor at C:\Users\Usman Khan\AppData\Roaming\Cursor
+2025-06-14 12:03:37,874 - INFO - Modifying telemetry IDs for cursor
+2025-06-14 12:03:38,479 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_telemetry_state.vscdb_20250614_120337
+2025-06-14 12:03:41,775 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_telemetry_storage.json_20250614_120341
+2025-06-14 12:03:41,775 - INFO - Updated telemetry.machineId in storage.json
+2025-06-14 12:03:41,792 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_telemetry_settings.json_20250614_120341
+2025-06-14 12:03:41,792 - INFO - Cleaning databases for cursor
+2025-06-14 12:03:42,692 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120342
+2025-06-14 12:03:42,714 - INFO - Deleted 1 records from ItemTable.value containing 'account'
+2025-06-14 12:03:42,714 - INFO - Deleted 4 records from ItemTable.key containing 'session'
+2025-06-14 12:03:42,714 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:42,714 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:42,724 - INFO - Deleted 5 records from ItemTable.value containing 'user'
+2025-06-14 12:03:42,724 - INFO - Deleted 6 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:42,733 - INFO - Deleted 1 records from ItemTable.value containing 'token'
+2025-06-14 12:03:42,733 - INFO - Deleted 2 records from ItemTable.value containing 'profile'
+2025-06-14 12:03:43,025 - INFO - Deleted 4 records from cursorDiskKV.value containing 'augment'
+2025-06-14 12:03:43,296 - INFO - Deleted 65 records from cursorDiskKV.value containing 'account'
+2025-06-14 12:03:43,525 - INFO - Deleted 305 records from cursorDiskKV.value containing 'session'
+2025-06-14 12:03:43,712 - INFO - Deleted 1289 records from cursorDiskKV.value containing 'user'
+2025-06-14 12:03:43,734 - INFO - Deleted 1 records from cursorDiskKV.value containing 'login'
+2025-06-14 12:03:43,774 - INFO - Deleted 156 records from cursorDiskKV.value containing 'auth'
+2025-06-14 12:03:43,791 - INFO - Deleted 24 records from cursorDiskKV.value containing 'token'
+2025-06-14 12:03:44,316 - INFO - Cleaned 1865 total records from state.vscdb
+2025-06-14 12:03:44,332 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,337 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,337 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,340 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,340 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,340 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,361 - INFO - Cleaned 6 total records from state.vscdb
+2025-06-14 12:03:44,369 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,372 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,372 - INFO - Deleted 7 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,372 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,392 - INFO - Cleaned 9 total records from state.vscdb
+2025-06-14 12:03:44,392 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,402 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,403 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,403 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,423 - INFO - Cleaned 4 total records from state.vscdb
+2025-06-14 12:03:44,427 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,427 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,427 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,427 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,427 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,427 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,455 - INFO - Cleaned 6 total records from state.vscdb
+2025-06-14 12:03:44,465 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,470 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,470 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,470 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,470 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,470 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,485 - INFO - Cleaned 5 total records from state.vscdb
+2025-06-14 12:03:44,492 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,498 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,498 - INFO - Deleted 2 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,498 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,498 - INFO - Deleted 4 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,498 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,523 - INFO - Cleaned 9 total records from state.vscdb
+2025-06-14 12:03:44,528 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,534 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,534 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,534 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,534 - INFO - Deleted 4 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,534 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,560 - INFO - Cleaned 8 total records from state.vscdb
+2025-06-14 12:03:44,570 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,575 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,575 - INFO - Deleted 2 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,575 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,575 - INFO - Deleted 4 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,575 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,589 - INFO - Cleaned 9 total records from state.vscdb
+2025-06-14 12:03:44,599 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,599 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,599 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,599 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,607 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,607 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,630 - INFO - Cleaned 6 total records from state.vscdb
+2025-06-14 12:03:44,631 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,640 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,640 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,640 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,640 - INFO - Deleted 4 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,640 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,645 - INFO - Deleted 3 records from ItemTable.value containing 'auth'
+2025-06-14 12:03:44,667 - INFO - Cleaned 11 total records from state.vscdb
+2025-06-14 12:03:44,674 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,678 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,678 - INFO - Deleted 3 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,678 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,678 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,678 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,678 - INFO - Deleted 3 records from ItemTable.value containing 'auth'
+2025-06-14 12:03:44,708 - INFO - Cleaned 11 total records from state.vscdb
+2025-06-14 12:03:44,716 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,716 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,716 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,716 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,724 - INFO - Deleted 3 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,724 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,745 - INFO - Cleaned 7 total records from state.vscdb
+2025-06-14 12:03:44,746 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,754 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,754 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,754 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,756 - INFO - Deleted 4 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,756 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,776 - INFO - Cleaned 8 total records from state.vscdb
+2025-06-14 12:03:44,777 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_database_state.vscdb_20250614_120344
+2025-06-14 12:03:44,786 - INFO - Deleted 2 records from ItemTable.value containing 'augment'
+2025-06-14 12:03:44,786 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:03:44,786 - INFO - Deleted 2 records from ItemTable.value containing 'session'
+2025-06-14 12:03:44,786 - INFO - Deleted 1 records from ItemTable.key containing 'user'
+2025-06-14 12:03:44,786 - INFO - Deleted 2 records from ItemTable.value containing 'user'
+2025-06-14 12:03:44,791 - INFO - Deleted 1 records from ItemTable.key containing 'auth'
+2025-06-14 12:03:44,797 - INFO - Cleaned 9 total records from state.vscdb
+2025-06-14 12:03:44,797 - INFO - Cleaning cache directories for cursor
+2025-06-14 12:03:44,848 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_Local Storage_20250614_120344
+2025-06-14 12:03:44,848 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\Local Storage (649.0 B freed)
+2025-06-14 12:03:45,066 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_Cache_20250614_120344
+2025-06-14 12:03:45,066 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\Cache (7.9 MB freed)
+2025-06-14 12:03:45,113 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_Code Cache_20250614_120345
+2025-06-14 12:03:45,113 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\Code Cache (144.0 B freed)
+2025-06-14 12:03:45,175 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_GPUCache_20250614_120345
+2025-06-14 12:03:45,175 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\GPUCache (5.6 MB freed)
+2025-06-14 12:03:45,193 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_blob_storage_20250614_120345
+2025-06-14 12:03:45,199 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\blob_storage (0.0 B freed)
+2025-06-14 12:03:47,456 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_logs_20250614_120345
+2025-06-14 12:03:47,649 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\logs (1.5 MB freed)
+2025-06-14 12:03:48,128 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_User_workspaceStorage_20250614_120347
+2025-06-14 12:03:48,190 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\User\workspaceStorage (1.4 MB freed)
+2025-06-14 12:03:54,607 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_User_History_20250614_120348
+2025-06-14 12:03:54,877 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\User\History (7.8 MB freed)
+2025-06-14 12:03:55,752 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_CachedData_20250614_120354
+2025-06-14 12:03:55,805 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\CachedData (58.5 MB freed)
+2025-06-14 12:03:55,940 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\cursor_cache_WebStorage_20250614_120355
+2025-06-14 12:03:55,940 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Cursor\WebStorage (290.9 KB freed)
+2025-06-14 12:03:55,954 - INFO - Created restore script: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\restore_cursor_20250614_120355.py
+2025-06-14 12:04:03,485 - INFO - Starting advanced cleanup for windsurf at C:\Users\Usman Khan\AppData\Roaming\Windsurf
+2025-06-14 12:04:03,731 - INFO - Modifying telemetry IDs for windsurf
+2025-06-14 12:04:03,731 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_telemetry_state.vscdb_20250614_120403
+2025-06-14 12:04:03,774 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_telemetry_storage.json_20250614_120403
+2025-06-14 12:04:03,782 - INFO - Updated telemetry.machineId in storage.json
+2025-06-14 12:04:03,797 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_telemetry_settings.json_20250614_120403
+2025-06-14 12:04:03,797 - INFO - Cleaning databases for windsurf
+2025-06-14 12:04:05,668 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,668 - INFO - Deleted 1 records from ItemTable.value containing 'account'
+2025-06-14 12:04:05,668 - INFO - Deleted 5 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,680 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,680 - INFO - Deleted 6 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,683 - INFO - Deleted 1 records from ItemTable.value containing 'login'
+2025-06-14 12:04:05,683 - INFO - Deleted 3 records from ItemTable.key containing 'auth'
+2025-06-14 12:04:05,683 - INFO - Deleted 1 records from ItemTable.key containing 'token'
+2025-06-14 12:04:05,683 - INFO - Deleted 1 records from ItemTable.value containing 'token'
+2025-06-14 12:04:05,683 - INFO - Deleted 2 records from ItemTable.value containing 'profile'
+2025-06-14 12:04:05,705 - INFO - Cleaned 21 total records from state.vscdb
+2025-06-14 12:04:05,712 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,717 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,718 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,718 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,734 - INFO - Cleaned 3 total records from state.vscdb
+2025-06-14 12:04:05,739 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,739 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,739 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,739 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,757 - INFO - Cleaned 3 total records from state.vscdb
+2025-06-14 12:04:05,765 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,765 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,765 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,771 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,795 - INFO - Cleaned 3 total records from state.vscdb
+2025-06-14 12:04:05,799 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,804 - INFO - Deleted 2 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,804 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,804 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,817 - INFO - Cleaned 4 total records from state.vscdb
+2025-06-14 12:04:05,828 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,840 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,840 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,840 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,861 - INFO - Cleaned 3 total records from state.vscdb
+2025-06-14 12:04:05,869 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_database_state.vscdb_20250614_120405
+2025-06-14 12:04:05,871 - INFO - Deleted 1 records from ItemTable.key containing 'session'
+2025-06-14 12:04:05,871 - INFO - Deleted 1 records from ItemTable.value containing 'session'
+2025-06-14 12:04:05,871 - INFO - Deleted 1 records from ItemTable.value containing 'user'
+2025-06-14 12:04:05,890 - INFO - Cleaned 3 total records from state.vscdb
+2025-06-14 12:04:05,890 - INFO - Cleaning cache directories for windsurf
+2025-06-14 12:04:05,961 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_Local Storage_20250614_120405
+2025-06-14 12:04:05,961 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\Local Storage (147.3 KB freed)
+2025-06-14 12:04:07,017 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_Cache_20250614_120406
+2025-06-14 12:04:07,044 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\Cache (23.4 MB freed)
+2025-06-14 12:04:07,084 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_Code Cache_20250614_120407
+2025-06-14 12:04:07,084 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\Code Cache (144.0 B freed)
+2025-06-14 12:04:07,210 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_GPUCache_20250614_120407
+2025-06-14 12:04:07,210 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\GPUCache (5.6 MB freed)
+2025-06-14 12:04:07,210 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_blob_storage_20250614_120407
+2025-06-14 12:04:07,227 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\blob_storage (0.0 B freed)
+2025-06-14 12:04:08,921 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_logs_20250614_120407
+2025-06-14 12:04:09,069 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\logs (555.9 KB freed)
+2025-06-14 12:04:09,178 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_User_workspaceStorage_20250614_120409
+2025-06-14 12:04:09,189 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\User\workspaceStorage (372.3 KB freed)
+2025-06-14 12:04:09,433 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_User_History_20250614_120409
+2025-06-14 12:04:09,438 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\User\History (248.3 KB freed)
+2025-06-14 12:04:10,042 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_CachedData_20250614_120409
+2025-06-14 12:04:10,064 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\CachedData (38.6 MB freed)
+2025-06-14 12:04:14,042 - INFO - Created backup: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\windsurf_cache_WebStorage_20250614_120410
+2025-06-14 12:04:14,167 - INFO - Cleaned cache directory: C:\Users\Usman Khan\AppData\Roaming\Windsurf\WebStorage (32.3 MB freed)
+2025-06-14 12:04:14,167 - INFO - Created restore script: C:\Users\Usman Khan\CursorWindsurf_Advanced_Backups\restore_windsurf_20250614_120414.py
+2025-06-14 12:04:29,338 - INFO - === Advanced Application Data Discovery ===
+2025-06-14 12:04:29,338 - INFO - Cursor AI: Found at C:\Users\Usman Khan\AppData\Roaming\Cursor
+2025-06-14 12:04:29,569 - INFO - Windsurf AI: Found at C:\Users\Usman Khan\AppData\Roaming\Windsurf
