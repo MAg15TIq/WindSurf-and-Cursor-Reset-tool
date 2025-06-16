@@ -77,15 +77,28 @@ class AdvancedDataCleaner:
         log_level = getattr(logging, log_config.get("level", "INFO"))
         log_file = log_config.get("file", "advanced_cleaner.log")
         
-        logging.basicConfig(
-            level=log_level,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler(log_file),
-                logging.StreamHandler(sys.stdout)
-            ]
-        )
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(f'{__name__}.{self.__class__.__name__}')
+        self.logger.setLevel(logging.INFO)
+
+        # Ensure handlers are not duplicated if called multiple times
+        if not self.logger.handlers:
+            # File handler
+            fh = logging.FileHandler(log_file)
+            fh.setLevel(logging.INFO)
+            fh_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+            fh.setFormatter(fh_formatter)
+            self.logger.addHandler(fh)
+
+            # Console handler
+            ch = logging.StreamHandler(sys.stdout)
+            ch.setLevel(logging.INFO)
+            # Set encoding for the console handler
+            if sys.stdout.encoding != 'UTF-8':
+                ch.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+                ch.stream = open(ch.stream.fileno(), 'w', encoding='utf-8', closefd=False)
+            ch_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+            ch.setFormatter(ch_formatter)
+            self.logger.addHandler(ch)
     
     def _get_backup_directory(self) -> Path:
         """Create and return the backup directory path."""
@@ -593,8 +606,10 @@ if __name__ == "__main__":
 
                 # Check if app is running
                 if self._is_app_running(app_name):
-                    self.logger.warning(f"  ⚠️  {display_name} is currently running")
-
+                    self.logger.warning(f"  {display_name} is currently running")
+                else:
+                    self.logger.info(f"  {display_name} is not running.")
+                
                 # Report detailed information
                 cleaning_options = self.config.get("cleaning_options", {})
                 cache_dirs = cleaning_options.get("cache_directories", [])

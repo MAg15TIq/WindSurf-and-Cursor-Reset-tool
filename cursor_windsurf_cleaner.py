@@ -29,15 +29,29 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('cursor_windsurf_cleaner.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
-)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create console handler and set level to info
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# Add formatter to ch
+ch.setFormatter(formatter)
+
+# Set encoding for the console handler
+ch.setLevel(logging.INFO)
+if sys.stdout.encoding != 'UTF-8':
+    ch.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    ch.stream = open(ch.stream.fileno(), 'w', encoding='utf-8', closefd=False)
+ch.setFormatter(formatter)
+
+# Add ch to logger
+if not logger.handlers:
+    logger.addHandler(ch)
 
 class DataCleaner:
     """Main class for cleaning Cursor and Windsurf application data."""
@@ -522,7 +536,9 @@ class DataCleaner:
 
                 # Check if app is running
                 if self._is_app_running(app_name):
-                    logger.warning(f"  ⚠️  {app_name.capitalize()} is currently running")
+                    logger.warning(f"  {app_name.capitalize()} is currently running")
+                else:
+                    logger.info(f"  {app_name.capitalize()} is not running.")
 
                 # Report key files/directories
                 key_locations = [
@@ -537,7 +553,7 @@ class DataCleaner:
                     path = app_path / location
                     if path.exists():
                         size = self._get_directory_size(path) if path.is_dir() else path.stat().st_size
-                        logger.info(f"  📁 {location}: {self._format_size(size)}")
+                        logger.info(f"  {location}: {self._format_size(size)}")
             else:
                 logger.info(f"{app_name.capitalize()}: Not found")
 
