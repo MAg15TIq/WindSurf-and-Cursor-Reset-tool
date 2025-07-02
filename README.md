@@ -87,6 +87,12 @@ python advanced_cleaner.py --clean windsurf
 
 # Nuclear option - clean everything without asking questions
 python advanced_cleaner.py --clean-all --no-confirm
+
+# Show progress bars for large operations (default)
+python advanced_cleaner.py --clean cursor
+
+# Disable progress bars (for scripting or minimal output)
+python advanced_cleaner.py --clean cursor --no-progress
 ```
 *The last command is for people who live dangerously and don't read warnings.*
 
@@ -359,3 +365,23 @@ This tool exists because some applications think they can limit how you use your
 ---
 
 *P.S. - If this tool saved your coding career, consider starring the repo. It's free and makes us feel good about ourselves.* ⭐
+
+## ⚡ Dependencies
+
+This tool now requires the following Python packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+- `tqdm` (for progress bars and status output)
+
+## 🚀 New Features & Enhancements
+
+- **Performance Optimization:**
+  - File and directory operations are now optimized for speed, especially on large directories.
+- **Progress Bar/Status Output:**
+  - All major cleaning operations now display a progress bar using `tqdm`.
+  - Use `--no-progress` to disable progress bars for scripting or quiet mode.
+- **Improved CLI:**
+  - The CLI now supports a `--no-progress` flag for user control over output.

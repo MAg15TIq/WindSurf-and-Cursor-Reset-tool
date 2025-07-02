@@ -25,15 +25,23 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 import argparse
+import re
+from tqdm import tqdm
+
+if platform.system().lower() == 'windows':
+    import winreg
 
 class AdvancedDataCleaner:
     """Advanced data cleaner with configuration support."""
     
-    def __init__(self, config_path: str = "cleaner_config.json"):
+    def __init__(self, config_path: str = "cleaner_config.json", dry_run: bool = False, verbose: bool = False, show_progress: bool = True):
         self.config = self._load_config(config_path)
         self.os_type = platform.system().lower()
         self.backup_base_dir = self._get_backup_directory()
         self.app_data_paths = self._discover_app_data_paths()
+        self.dry_run = dry_run
+        self.verbose = verbose
+        self.show_progress = show_progress
         self._setup_logging()
         
     def _load_config(self, config_path: str) -> Dict[str, Any]:
@@ -57,7 +65,8 @@ class AdvancedDataCleaner:
                 "database_keywords": ["augment", "account", "session", "user"],
                 "cache_directories": ["Cache", "IndexedDB", "Local Storage"],
                 "database_files": ["state.vscdb", "storage.json"],
-                "cache_table_patterns": ["cache", "session", "temp", "log"]
+                "cache_table_patterns": ["cache", "session", "temp", "log"],
+                "registry_patterns": []
             },
             "backup_options": {
                 "enabled": True,
@@ -153,14 +162,14 @@ class AdvancedDataCleaner:
                     if result.stdout.strip():
                         return True
         except Exception as e:
-            self.logger.warning(f"Could not check if {app_name} is running: {e}")
+            self._log(f"Could not check if {app_name} is running: {e}", logging.WARNING)
         
         return False
     
     def _create_backup(self, source_path: Path, backup_name: str) -> Optional[Path]:
         """Create a backup with optional compression."""
         if not source_path.exists():
-            self.logger.warning(f"Source path does not exist: {source_path}")
+            self._log(f"Source path does not exist: {source_path}", logging.WARNING)
             return None
         
         backup_options = self.config.get("backup_options", {})
@@ -187,11 +196,11 @@ class AdvancedDataCleaner:
                 else:
                     shutil.copytree(source_path, backup_path)
             
-            self.logger.info(f"Created backup: {backup_path}")
+            self._log(f"Created backup: {backup_path}")
             return backup_path
             
         except Exception as e:
-            self.logger.error(f"Failed to create backup of {source_path}: {e}")
+            self._log(f"Failed to create backup of {source_path}: {e}", logging.ERROR)
             return None
     
     def _clean_old_backups(self) -> None:
@@ -211,9 +220,9 @@ class AdvancedDataCleaner:
                         backup_file.unlink()
                     else:
                         shutil.rmtree(backup_file)
-                    self.logger.info(f"Removed old backup: {backup_file}")
+                    self._log(f"Removed old backup: {backup_file}")
         except Exception as e:
-            self.logger.warning(f"Error cleaning old backups: {e}")
+            self._log(f"Error cleaning old backups: {e}", logging.WARNING)
     
     def _create_restore_script(self, app_name: str, backups: List[Path]) -> None:
         """Create a script to restore from backups."""
@@ -258,26 +267,74 @@ if __name__ == "__main__":
             with open(script_path, 'w', encoding='utf-8') as f:
                 f.write(script_content)
             script_path.chmod(0o755)  # Make executable
-            self.logger.info(f"Created restore script: {script_path}")
+            self._log(f"Created restore script: {script_path}")
         except Exception as e:
-            self.logger.warning(f"Could not create restore script: {e}")
+            self._log(f"Could not create restore script: {e}", logging.WARNING)
     
+    def _log(self, message, level=logging.INFO):
+        if self.verbose or level >= logging.WARNING:
+            self.logger.log(level, message)
+
+    def _clean_registry_windows(self, app_name: str) -> bool:
+        """Clean registry keys/values related to the app (Windows only)."""
+        if platform.system().lower() != 'windows':
+            return True
+        reg_config = self.config.get('cleaning_options', {}).get('registry_patterns', [])
+        if not reg_config:
+            self._log(f"No registry patterns configured for {app_name}")
+            return True
+        success = True
+        for root, root_name in [(winreg.HKEY_CURRENT_USER, 'HKCU'), (winreg.HKEY_LOCAL_MACHINE, 'HKLM')]:
+            for subkey in [r'SOFTWARE', r'SOFTWARE\\WOW6432Node']:
+                try:
+                    with winreg.OpenKey(root, subkey) as hkey:
+                        i = 0
+                        while True:
+                            try:
+                                subkey_name = winreg.EnumKey(hkey, i)
+                                full_path = f"{root_name}\\{subkey}\\{subkey_name}"
+                                for pattern in reg_config:
+                                    if re.search(pattern, subkey_name, re.IGNORECASE):
+                                        # Backup/export
+                                        if self.dry_run:
+                                            self._log(f"[DRY-RUN] Would delete registry key: {full_path}")
+                                        else:
+                                            self._log(f"Deleting registry key: {full_path}")
+                                            # Export key before deletion
+                                            backup_file = str(self.backup_base_dir / f"{app_name}_reg_{subkey_name}.reg")
+                                            try:
+                                                subprocess.run(["reg", "export", full_path, backup_file, "/y"], check=True)
+                                                self._log(f"Exported registry key to {backup_file}")
+                                            except Exception as e:
+                                                self._log(f"Failed to export registry key {full_path}: {e}", logging.WARNING)
+                                            try:
+                                                winreg.DeleteKey(hkey, subkey_name)
+                                            except Exception as e:
+                                                self._log(f"Failed to delete registry key {full_path}: {e}", logging.ERROR)
+                                                success = False
+                                i += 1
+                            except OSError:
+                                break
+                except Exception as e:
+                    continue
+        return success
+
     def clean_application_advanced(self, app_name: str) -> bool:
         """Advanced cleaning with configuration support."""
         app_path = self.app_data_paths.get(app_name.lower())
         
         if not app_path:
-            self.logger.error(f"{app_name} data directory not found")
+            self._log(f"{app_name} data directory not found", logging.ERROR)
             return False
         
-        self.logger.info(f"Starting advanced cleanup for {app_name} at {app_path}")
+        self._log(f"Starting advanced cleanup for {app_name} at {app_path}")
         
         # Safety checks
         safety_options = self.config.get("safety_options", {})
         
         if safety_options.get("check_running_processes", True):
             if self._is_app_running(app_name):
-                self.logger.error(f"{app_name} is currently running. Please close it first.")
+                self._log(f"{app_name} is currently running. Please close it first.", logging.ERROR)
                 return False
         
         # Clean old backups first
@@ -296,6 +353,10 @@ if __name__ == "__main__":
             
             success &= self._modify_telemetry_advanced(app_path, app_name, telemetry_keys, session_keys, backups_created)
             
+            # Phase 1b: Registry cleaning (Windows only)
+            if self.os_type == 'windows':
+                success &= self._clean_registry_windows(app_name)
+            
             # Phase 2: Database cleaning
             db_keywords = cleaning_options.get("database_keywords", [])
             success &= self._clean_databases_advanced(app_path, app_name, db_keywords, backups_created)
@@ -309,57 +370,59 @@ if __name__ == "__main__":
                 self._create_restore_script(app_name, backups_created)
             
             if success:
-                self.logger.info(f"✅ Successfully cleaned {app_name} data")
+                self._log(f"✅ Successfully cleaned {app_name} data")
             else:
-                self.logger.warning(f"⚠️  Cleanup for {app_name} completed with some errors")
+                self._log(f"⚠️  Cleanup for {app_name} completed with some errors")
             
             return success
             
         except Exception as e:
-            self.logger.error(f"Unexpected error during {app_name} cleanup: {e}")
+            self._log(f"Unexpected error during {app_name} cleanup: {e}", logging.ERROR)
             return False
+
+    def _find_files_recursive(self, root: Path, filenames: list) -> list:
+        """Recursively find files with given names under root, with progress bar."""
+        found = []
+        # Count total directories for progress bar
+        all_dirs = [x[0] for x in os.walk(root)]
+        iterator = os.walk(root)
+        if self.show_progress:
+            iterator = tqdm(iterator, desc=f"Scanning {root}", total=len(all_dirs), disable=not self.show_progress)
+        for dirpath, _, files in iterator:
+            for fname in files:
+                if fname in filenames:
+                    found.append(Path(dirpath) / fname)
+        return found
 
     def _modify_telemetry_advanced(self, app_path: Path, app_name: str,
                                  telemetry_keys: List[str], session_keys: List[str],
                                  backups_created: List[Path]) -> bool:
-        """Advanced telemetry modification with configurable keys."""
-        self.logger.info(f"Modifying telemetry IDs for {app_name}")
-
+        self._log(f"Modifying telemetry IDs for {app_name}")
         cleaning_options = self.config.get("cleaning_options", {})
         db_files = cleaning_options.get("database_files", ["state.vscdb", "storage.json"])
-
+        # Recursively find all relevant files
+        found_files = self._find_files_recursive(app_path, db_files)
         success = True
-
-        for db_file_name in db_files:
-            # Check common locations
-            possible_paths = [
-                app_path / "User" / "globalStorage" / db_file_name,
-                app_path / "User" / db_file_name,
-                app_path / db_file_name
-            ]
-
-            for db_path in possible_paths:
-                if not db_path.exists():
-                    continue
-
-                # Create backup
-                backup = self._create_backup(db_path, f"{app_name}_telemetry_{db_file_name}")
-                if backup:
-                    backups_created.append(backup)
-
-                try:
-                    if db_path.suffix in ['.vscdb', '.db', '.sqlite', '.sqlite3']:
-                        success &= self._modify_sqlite_telemetry_advanced(
-                            db_path, telemetry_keys, session_keys
-                        )
-                    elif db_path.suffix == '.json':
-                        success &= self._modify_json_telemetry_advanced(
-                            db_path, telemetry_keys, session_keys
-                        )
-                except Exception as e:
-                    self.logger.error(f"Failed to modify {db_path}: {e}")
-                    success = False
-
+        for db_path in found_files:
+            if not db_path.exists():
+                continue
+            backup = self._create_backup(db_path, f"{app_name}_telemetry_{db_path.name}")
+            if backup:
+                backups_created.append(backup)
+            try:
+                if db_path.suffix in ['.vscdb', '.db', '.sqlite', '.sqlite3']:
+                    success &= self._modify_sqlite_telemetry_advanced(
+                        db_path, telemetry_keys, session_keys
+                    )
+                elif db_path.suffix == '.json':
+                    success &= self._modify_json_telemetry_advanced(
+                        db_path, telemetry_keys, session_keys
+                    )
+            except Exception as e:
+                self._log(f"Failed to modify {db_path}: {e}", logging.ERROR)
+                success = False
+        if not found_files:
+            self._log(f"No telemetry/database files found for {app_name} in {app_path}", logging.WARNING)
         return success
 
     def _modify_sqlite_telemetry_advanced(self, db_path: Path,
@@ -383,7 +446,7 @@ if __name__ == "__main__":
                         cursor.execute("UPDATE ItemTable SET value = ? WHERE key = ?", (new_machine_id, key))
 
                     if cursor.rowcount > 0:
-                        self.logger.info(f"Updated {key} in {db_path.name}")
+                        self._log(f"Updated {key} in {db_path.name}")
                 except sqlite3.Error:
                     pass
 
@@ -392,7 +455,7 @@ if __name__ == "__main__":
                 try:
                     cursor.execute("DELETE FROM ItemTable WHERE key = ?", (key,))
                     if cursor.rowcount > 0:
-                        self.logger.info(f"Cleared {key} from {db_path.name}")
+                        self._log(f"Cleared {key} from {db_path.name}")
                 except sqlite3.Error:
                     pass
 
@@ -403,7 +466,7 @@ if __name__ == "__main__":
             return True
 
         except Exception as e:
-            self.logger.error(f"Failed to modify SQLite telemetry in {db_path}: {e}")
+            self._log(f"Failed to modify SQLite telemetry in {db_path}: {e}", logging.ERROR)
             return False
 
     def _modify_json_telemetry_advanced(self, json_path: Path,
@@ -427,14 +490,14 @@ if __name__ == "__main__":
                     else:
                         data[key] = new_machine_id
                     modified = True
-                    self.logger.info(f"Updated {key} in {json_path.name}")
+                    self._log(f"Updated {key} in {json_path.name}")
 
             # Remove session keys
             for key in session_keys:
                 if key in data:
                     del data[key]
                     modified = True
-                    self.logger.info(f"Removed {key} from {json_path.name}")
+                    self._log(f"Removed {key} from {json_path.name}")
 
             if modified:
                 with open(json_path, 'w', encoding='utf-8') as f:
@@ -443,13 +506,13 @@ if __name__ == "__main__":
             return True
 
         except Exception as e:
-            self.logger.error(f"Failed to modify JSON telemetry in {json_path}: {e}")
+            self._log(f"Failed to modify JSON telemetry in {json_path}: {e}", logging.ERROR)
             return False
 
     def _clean_databases_advanced(self, app_path: Path, app_name: str,
                                 keywords: List[str], backups_created: List[Path]) -> bool:
         """Advanced database cleaning with configurable keywords."""
-        self.logger.info(f"Cleaning databases for {app_name}")
+        self._log(f"Cleaning databases for {app_name}")
 
         # Find all database files
         db_patterns = ['*.db', '*.sqlite', '*.sqlite3', '*.vscdb']
@@ -458,9 +521,13 @@ if __name__ == "__main__":
         for pattern in db_patterns:
             db_files.extend(app_path.rglob(pattern))
 
+        iterator = db_files
+        if self.show_progress:
+            iterator = tqdm(db_files, desc=f"Cleaning DBs for {app_name}", disable=not self.show_progress)
+
         success = True
 
-        for db_file in db_files:
+        for db_file in iterator:
             if 'backup' in str(db_file).lower() or '.bak' in str(db_file):
                 continue
 
@@ -471,7 +538,7 @@ if __name__ == "__main__":
             try:
                 success &= self._clean_sqlite_advanced(db_file, keywords)
             except Exception as e:
-                self.logger.error(f"Failed to clean database {db_file}: {e}")
+                self._log(f"Failed to clean database {db_file}: {e}", logging.ERROR)
                 success = False
 
         return success
@@ -499,7 +566,7 @@ if __name__ == "__main__":
                             deleted = cursor.rowcount
                             if deleted > 0:
                                 cleaned_records += deleted
-                                self.logger.info(f"Cleared {deleted} records from cache table {table}")
+                                self._log(f"Cleared {deleted} records from cache table {table}")
                             break
                     else:
                         # Clean by keywords for non-cache tables
@@ -513,52 +580,52 @@ if __name__ == "__main__":
                                     deleted = cursor.rowcount
                                     if deleted > 0:
                                         cleaned_records += deleted
-                                        self.logger.info(f"Deleted {deleted} records from {table}.{col} containing '{keyword}'")
+                                        self._log(f"Deleted {deleted} records from {table}.{col} containing '{keyword}'")
                                 except sqlite3.Error:
                                     pass
 
                 except sqlite3.Error as e:
-                    self.logger.debug(f"Could not process table {table}: {e}")
+                    self._log(f"Could not process table {table}: {e}", logging.DEBUG)
                     continue
 
             if cleaned_records > 0:
                 conn.commit()
                 conn.execute("VACUUM")
-                self.logger.info(f"Cleaned {cleaned_records} total records from {db_path.name}")
+                self._log(f"Cleaned {cleaned_records} total records from {db_path.name}")
 
             conn.close()
             return True
 
         except Exception as e:
-            self.logger.error(f"Failed to clean SQLite database {db_path}: {e}")
+            self._log(f"Failed to clean SQLite database {db_path}: {e}", logging.ERROR)
             return False
 
     def _clean_cache_advanced(self, app_path: Path, app_name: str,
                             cache_dirs: List[str], backups_created: List[Path]) -> bool:
-        """Advanced cache cleaning with configurable directories."""
-        self.logger.info(f"Cleaning cache directories for {app_name}")
-
+        self._log(f"Cleaning cache directories for {app_name}")
         success = True
-
         for dir_name in cache_dirs:
-            dir_path = app_path / dir_name
-            if not dir_path.exists():
-                continue
-
-            # Check size before cleaning
-            size_before = self._get_directory_size(dir_path)
-
-            backup = self._create_backup(dir_path, f"{app_name}_cache_{dir_name.replace('/', '_')}")
-            if backup:
-                backups_created.append(backup)
-
-            try:
-                self._clear_directory_contents(dir_path)
-                self.logger.info(f"Cleaned cache directory: {dir_path} ({self._format_size(size_before)} freed)")
-            except Exception as e:
-                self.logger.error(f"Failed to clean cache directory {dir_path}: {e}")
-                success = False
-
+            # Recursively find all matching directories (including hidden/system)
+            dir_paths = list(app_path.rglob(dir_name))
+            iterator = dir_paths
+            if self.show_progress:
+                iterator = tqdm(dir_paths, desc=f"Cleaning {dir_name}", disable=not self.show_progress)
+            for dir_path in iterator:
+                if not dir_path.exists():
+                    continue
+                size_before = self._get_directory_size(dir_path)
+                backup = self._create_backup(dir_path, f"{app_name}_cache_{dir_name.replace('/', '_')}")
+                if backup:
+                    backups_created.append(backup)
+                try:
+                    if self.dry_run:
+                        self._log(f"[DRY-RUN] Would clear cache directory: {dir_path} ({self._format_size(size_before)} freed)")
+                    else:
+                        self._clear_directory_contents(dir_path)
+                        self._log(f"Cleaned cache directory: {dir_path} ({self._format_size(size_before)} freed)")
+                except Exception as e:
+                    self._log(f"Failed to clean cache directory {dir_path}: {e}", logging.ERROR)
+                    success = False
         return success
 
     def _clear_directory_contents(self, directory: Path) -> None:
@@ -570,7 +637,7 @@ if __name__ == "__main__":
                 elif item.is_dir():
                     shutil.rmtree(item)
             except Exception as e:
-                self.logger.warning(f"Could not remove {item}: {e}")
+                self._log(f"Could not remove {item}: {e}", logging.WARNING)
 
     def _get_directory_size(self, directory: Path) -> int:
         """Calculate total size of directory contents."""
@@ -583,7 +650,7 @@ if __name__ == "__main__":
             pass
         return total_size
 
-    def _format_size(self, size_bytes: int) -> str:
+    def _format_size(self, size_bytes: float) -> str:
         """Format file size in human readable format."""
         for unit in ['B', 'KB', 'MB', 'GB']:
             if size_bytes < 1024.0:
@@ -593,7 +660,7 @@ if __name__ == "__main__":
 
     def discover_and_report_advanced(self) -> None:
         """Advanced discovery and reporting with configuration details."""
-        self.logger.info("=== Advanced Application Data Discovery ===")
+        self._log("=== Advanced Application Data Discovery ===")
 
         apps_config = self.config.get("applications", {})
 
@@ -602,13 +669,13 @@ if __name__ == "__main__":
             display_name = app_config.get("display_name", app_name.capitalize())
 
             if app_path:
-                self.logger.info(f"{display_name}: Found at {app_path}")
+                self._log(f"{display_name}: Found at {app_path}")
 
                 # Check if app is running
                 if self._is_app_running(app_name):
-                    self.logger.warning(f"  {display_name} is currently running")
+                    self._log(f"  {display_name} is currently running", logging.WARNING)
                 else:
-                    self.logger.info(f"  {display_name} is not running.")
+                    self._log(f"  {display_name} is not running.")
                 
                 # Report detailed information
                 cleaning_options = self.config.get("cleaning_options", {})
@@ -620,9 +687,9 @@ if __name__ == "__main__":
                     if cache_path.exists():
                         size = self._get_directory_size(cache_path)
                         total_cache_size += size
-                        self.logger.info(f"  📁 {cache_dir}: {self._format_size(size)}")
+                        self._log(f"  📁 {cache_dir}: {self._format_size(size)}")
 
-                self.logger.info(f"  💾 Total cache size: {self._format_size(total_cache_size)}")
+                self._log(f"  💾 Total cache size: {self._format_size(total_cache_size)}")
 
                 # Check for database files
                 db_files = cleaning_options.get("database_files", [])
@@ -634,19 +701,36 @@ if __name__ == "__main__":
                     ]:
                         if possible_path.exists():
                             size = possible_path.stat().st_size
-                            self.logger.info(f"  🗄️  {db_file}: {self._format_size(size)}")
+                            self._log(f"  🗄️  {db_file}: {self._format_size(size)}")
                             break
             else:
-                self.logger.info(f"{display_name}: Not found")
+                self._log(f"{display_name}: Not found")
 
-        self.logger.info(f"📁 Backup directory: {self.backup_base_dir}")
+        self._log(f"📁 Backup directory: {self.backup_base_dir}")
 
         # Report configuration summary
         backup_options = self.config.get("backup_options", {})
-        self.logger.info(f"🔧 Backup enabled: {backup_options.get('enabled', True)}")
-        self.logger.info(f"🔧 Compression: {backup_options.get('compression', False)}")
-        self.logger.info(f"🔧 Retention: {backup_options.get('retention_days', 30)} days")
+        self._log(f"🔧 Backup enabled: {backup_options.get('enabled', True)}")
+        self._log(f"🔧 Compression: {backup_options.get('compression', False)}")
+        self._log(f"🔧 Retention: {backup_options.get('retention_days', 30)} days")
 
+def print_network_guidance():
+    print("\n🌐 Network/Cloud Fingerprinting Guidance:")
+    print("- If you still cannot register, the app may track your IP or use cloud blacklisting.")
+    print("- Try using a VPN or a different network connection.")
+    print("- Optionally flush your DNS cache:")
+    print("    Windows: ipconfig /flushdns")
+    print("    macOS: sudo killall -HUP mDNSResponder")
+    print("    Linux: sudo systemd-resolve --flush-caches")
+    print("- If registration is web-based, clear your browser cookies and cache.")
+    print("- For advanced users: consider spoofing your MAC address (see documentation).\n")
+
+def print_hardware_guidance():
+    print("\n💻 Hardware Fingerprinting Guidance:")
+    print("- Some apps may use hardware IDs (e.g., MAC address, disk serial) for tracking.")
+    print("- Changing these requires advanced tools and may affect your system.")
+    print("- Only attempt hardware spoofing if you understand the risks.")
+    print("- See the documentation for recommended tools and safety tips.\n")
 
 def main():
     """Main CLI interface for advanced cleaner."""
@@ -659,6 +743,7 @@ Examples:
   python advanced_cleaner.py --clean cursor
   python advanced_cleaner.py --clean windsurf --config custom_config.json
   python advanced_cleaner.py --clean-all --no-confirm
+  python advanced_cleaner.py --dry-run --verbose
         """
     )
 
@@ -672,6 +757,13 @@ Examples:
                        help="Clean all found applications")
     parser.add_argument("--no-confirm", action="store_true",
                        help="Skip confirmation prompts (use with caution)")
+    parser.add_argument("--dry-run", action="store_true",
+                       help="Preview actions without making changes")
+    parser.add_argument("--verbose", action="store_true",
+                       help="Show detailed output")
+    parser.add_argument("--network-guidance", action="store_true", help="Show network/cloud fingerprinting guidance and exit")
+    parser.add_argument("--hardware-guidance", action="store_true", help="Show hardware fingerprinting guidance and exit")
+    parser.add_argument("--no-progress", action="store_true", help="Disable progress bars for cleaning operations")
     parser.add_argument("--version", action="version", version="Advanced Cleaner v2.0.0")
 
     args = parser.parse_args()
@@ -684,13 +776,20 @@ Examples:
     print()
 
     try:
-        cleaner = AdvancedDataCleaner(args.config)
+        cleaner = AdvancedDataCleaner(args.config, dry_run=args.dry_run, verbose=args.verbose, show_progress=not args.no_progress)
     except Exception as e:
         print(f"❌ Failed to initialize cleaner: {e}")
         return 1
 
     if args.discover:
         cleaner.discover_and_report_advanced()
+        return 0
+
+    if args.network_guidance:
+        print_network_guidance()
+        return 0
+    if args.hardware_guidance:
+        print_hardware_guidance()
         return 0
 
     # Get available applications
@@ -753,18 +852,29 @@ Examples:
 
     # Perform cleaning
     overall_success = True
+    summary = []
     for app_name in apps_to_clean:
         print(f"\n🧹 Starting cleanup for {app_name}...")
         success = cleaner.clean_application_advanced(app_name)
         overall_success &= success
+        summary.append((app_name, success))
+
+    # Summary reporting
+    print("\n===== Cleaning Summary =====")
+    for app, ok in summary:
+        print(f"{app}: {'✅ Success' if ok else '⚠️  Issues encountered'}")
 
     if overall_success:
         print(f"\n✅ Successfully cleaned data for: {', '.join(apps_to_clean)}")
         print(f"📁 Backups saved to: {cleaner.backup_base_dir}")
         print("\nYou can now launch the applications and log in with different accounts.")
+        print_network_guidance()
+        print_hardware_guidance()
     else:
         print(f"\n⚠️  Cleanup completed with some errors. Check the log file for details.")
         print(f"📁 Backups saved to: {cleaner.backup_base_dir}")
+        print_network_guidance()
+        print_hardware_guidance()
 
     return 0 if overall_success else 1
 
